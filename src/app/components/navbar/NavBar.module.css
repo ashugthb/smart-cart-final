@@ -1,0 +1,110 @@
+/* NavBar.module.css */
+
+/* Navbar container */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #000;
+    color: #fff;
+    padding: 0.5rem 2rem; /* Adjust for desired spacing */
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Logo container */
+  .logoContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .logoIcon {
+    width: 30px;
+    height: 30px;
+    background-color: #fff; /* Replace with actual icon or image */
+    border-radius: 4px;
+    cursor:pointer;
+  }
+  
+  .logoText {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  /* Navigation links */
+  .navLinks {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+    margin: 0;
+  }
+  
+  .navLink {
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .navLink:hover {
+    color: #ccc;
+  }
+  
+  /* Search and cart container */
+  .searchCart {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .searchInput {
+    padding: 0.5rem 1rem;
+    border-radius: 7px;
+    border: 1px solid #444;
+    background-color: #222;
+    color: #fff;
+    outline: none;
+    width: 200px;
+    transition: all 0.3s ease;
+  }
+  
+  .searchInput::placeholder {
+    color: #aaa;
+  }
+  
+  .searchInput:focus {
+    border-color: #fff;
+  }
+  
+  .searchButton {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .searchButton:hover {
+    transform: scale(1.1);
+  }
+  
+  .cartButton {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .cartButton:hover {
+    transform: scale(1.1);
+  }
+  

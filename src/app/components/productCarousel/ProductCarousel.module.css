@@ -1,0 +1,93 @@
+.carouselWrapper {
+    width: 100%;
+    overflow: hidden; /* Hide content outside the visible area */
+    background-color: #000; /* Optional: match the background color in your UI */
+    padding: 20px 0;
+  }
+  
+  .carousel {
+    display: flex;
+    gap: 20px;
+    animation: scrollLeft 20s linear infinite; /* Animate continuously to the left */
+    height: 100%; /* Ensure child elements inherit the full height */
+  }
+  
+  .product {
+    min-width: 250px; /* Adjust based on your design */
+    flex-shrink: 0; /* Prevent products from shrinking */
+    text-align: center;
+    color: white;
+    transition: transform 0.3s ease, border-color 0.3s ease; /* Smooth scaling and border animation */
+    border: 2px solid transparent; /* Initial border */
+    padding: 10px;
+    height: 100%; /* Ensure products inherit container height */
+  }
+  
+  .product:hover {
+    transform: scale(1.05); /* Slightly scale up the product */
+    border-color: #00f; /* Add blue outline on hover */
+  }
+  
+  .image {
+    width: 100%;
+    height: auto;
+    max-height: 200px; /* Limit image height to fit inside product card */
+    object-fit: contain;
+    transition: transform 0.3s ease; /* Smooth scaling */
+  }
+  
+  .product:hover .image {
+    transform: scale(1.1); /* Scale the image slightly more for hover effect */
+  }
+  
+  .info {
+    margin-top: 10px;
+  }
+  
+  .name {
+    display: block;
+    font-size: 1rem;
+  }
+  
+  .price {
+    color: #00f; /* Optional: styling for the price */
+    font-size: 1.2rem;
+  }
+  
+  /* Animation for continuous scrolling */
+  @keyframes scrollLeft {
+    0% {
+      transform: translateX(0); /* Start at the beginning */
+    }
+    100% {
+      transform: translateX(-100%); /* Move completely to the left */
+    }
+  }
+  
+  /* Responsive height constraints */
+  .carouselWrapper {
+    max-height: 285px; /* Max height for large screens */
+    height: 100%; /* Ensure responsiveness */
+  }
+  
+  /* Smaller screen adjustments */
+  @media screen and (max-width: 768px) {
+    .carouselWrapper {
+      max-height: 240px; /* Reduce height for tablets */
+    }
+  
+    .image {
+      max-height: 180px; /* Scale down image size proportionally */
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .carouselWrapper {
+      max-height: 200px; /* Reduce height further for mobile */
+    }
+  
+    .image {
+      max-height: 150px; /* Scale down image size further for mobile */
+    }
+  }
+  

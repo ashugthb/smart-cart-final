@@ -1,0 +1,154 @@
+/* General Footer Styling */
+.footer {
+    background-color: #000;
+    color: #fff;
+    padding: 2rem 0;
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Main Footer Section */
+  .mainFooter {
+    padding-bottom: 1rem;
+  }
+  
+  .footerContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  @media (min-width: 1024px) {
+    .footerContainer {
+      flex-direction: row;
+    }
+  }
+  
+  /* Logo Section */
+  .logoSection {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .logo {
+    width: 2rem;
+    height: 2rem;
+    background-color: #444;
+    border-radius: 0.5rem;
+  }
+  
+  .logoText {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  /* Link Section */
+  .linkSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left; /* Align links to the left */
+    align-items: flex-start; /* Ensures links align to the left */
+  }
+  
+  @media (min-width: 1024px) {
+    .linkSection {
+      text-align: left; /* Ensure alignment stays consistent on larger screens */
+    }
+  }
+  
+  .link {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+  }
+  
+  .link:hover {
+    color: #888;
+  }
+  
+  /* Button Section */
+  .buttonSection {
+    display: flex;
+    align-items: center;
+  }
+  
+  .deployButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #333;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .deployButton:hover {
+    background-color: #444;
+  }
+  
+  .deployText {
+    font-size: 0.9rem;
+  }
+  
+  .deployIcon {
+    width: 1rem;
+    height: 1rem;
+    background-color: #fff;
+    border-radius: 50%;
+  }
+  
+  /* Bottom Footer Section */
+  .bottomFooter {
+    border-top: 1px solid #444;
+    padding-top: 1rem;
+  }
+  
+  .bottomContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  @media (min-width: 1024px) {
+    .bottomContainer {
+      flex-direction: row;
+    }
+  }
+  
+  .bottomText {
+    font-size: 0.8rem;
+  }
+  
+  .bottomLink {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+  }
+  
+  .bottomLink:hover {
+    color: #888;
+  }
+  
+  .createdBy {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .vercelIcon {
+    width: 1rem;
+    height: 1rem;
+    background-color: #fff;
+    border-radius: 50%;
+  }
+  
