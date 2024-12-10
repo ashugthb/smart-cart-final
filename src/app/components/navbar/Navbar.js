@@ -7,22 +7,44 @@ import styles from "./NavBar.module.css";
 const NavBar = () => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
 
   const handleSearchSubmit = (e) => {
     e.preventDefault(); // Prevent page reload
-    if (searchTerm.trim()) {
-      router.push(`/product/${searchTerm.trim()}`); // Navigate to the product page
+    const trimmedSearchTerm = searchTerm.trim();
+    if (trimmedSearchTerm) {
+      router.push(`/product/${trimmedSearchTerm}`); // Navigate to the product page
+    } else {
+      alert("Please enter a valid product ID");
     }
   };
-const handleHomeRout=(e)=>{
 
-  router.push( `/`);
-}
+  const handleHomeRout = () => {
+    router.push(`/`);
+  };
+
+  const handleAddProduct = () => {
+    router.push(`/addProduct`);
+  };
+
+  const handleLogin = () => {
+    if (isLoggedIn) {
+      // Handle logout logic
+      setIsLoggedIn(false); // Update state
+      alert("You have been logged out!");
+    } else {
+      // Navigate to login page
+      router.push(`/login`);
+    }
+  };
+
   return (
     <nav className={styles.navbar}>
       <div className={styles.logoContainer}>
         <div className={styles.logoIcon}></div>
-        <span className={styles.logoText} onClick={handleHomeRout}>SMART CART</span>
+        <span className={styles.logoText} onClick={handleHomeRout}>
+          SMART CART
+        </span>
       </div>
       <ul className={styles.navLinks}>
         <li>
@@ -32,7 +54,9 @@ const handleHomeRout=(e)=>{
           <span className={styles.navLink}>Shirts</span>
         </li>
         <li>
-          <span className={styles.navLink}>Stickers</span>
+          <span className={styles.navLink} onClick={handleAddProduct}>
+            Add Products
+          </span>
         </li>
       </ul>
       <div className={styles.searchCart}>
@@ -45,9 +69,14 @@ const handleHomeRout=(e)=>{
             onChange={(e) => setSearchTerm(e.target.value)} // Update state on input change
             className={styles.searchInput}
           />
-          <button type="submit" className={styles.searchButton}>🔍</button>
+          <button type="submit" className={styles.searchButton}>
+            🔍
+          </button>
         </form>
         <button className={styles.cartButton}>🛒</button>
+        <button className={styles.authButton} onClick={handleLogin}>
+          {isLoggedIn ? "Logout" : "Login"}
+        </button>
       </div>
     </nav>
   );

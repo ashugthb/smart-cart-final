@@ -1,133 +1,211 @@
 /* General ProductGrid Styling */
 .productGridWrapper {
-    padding: 2rem 1rem;
-    margin-top: 5rem;
-    margin-bottom: 5rem; /* Adds space to avoid overlap with the footer */
-    display: flex;
-    justify-content: center;
-    min-height: 600px; /* Ensures the grid takes up proper space */
-    background-color: #000; /* Matches the background color */
-    color: #fff;
-  }
-  
-  .gridContainer {
-    width: 1101px;
-    height: 457px;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 1rem;
-    max-width: 100%;
-  }
-  
-  .sideProducts {
-    display: grid;
-    grid-template-rows: repeat(2, 1fr);
-    gap: 1rem;
-  }
-  
-  /* Main Product Styling */
-  .mainProduct {
-    position: relative;
-  }
-  
-  .imageWrapper {
-    border: 1px solid transparent;
-    transition: all 0.3s ease-in-out;
-    height: 100%;
-    overflow: hidden;
-    border-radius: 0.5rem;
-  }
-  
-  .image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: scale(1);
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .imageWrapper:hover {
-    border-color: #3b82f6; /* Blue border on hover */
-  }
-  
-  .group:hover .image {
-    transform: scale(1.05); /* Scale effect on hover */
-  }
-  
-  .info {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 0.5rem 1rem;
-    border-radius: 9999px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .name {
-    margin-right: 0.5rem;
-  }
-  
-  .price {
-    background-color: #3b82f6; /* Blue background for price */
-    color: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-  }
-  
-  /* Side Product Styling */
-  .sideProduct {
-    position: relative;
-  }
-  
-  .sideProducts .imageWrapper {
-    border: 1px solid transparent;
-    transition: all 0.3s ease-in-out;
-    height: 100%;
-    overflow: hidden;
-    border-radius: 0.5rem;
-  }
-  
-  .sideProducts .image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: scale(1);
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .sideProducts .imageWrapper:hover {
-    border-color: #3b82f6; /* Blue border on hover */
-  }
-  
-  .sideProducts .group:hover .image {
-    transform: scale(1.05); /* Scale effect on hover */
-  }
-  
-  .sideProducts .info {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 0.5rem 1rem;
-    border-radius: 9999px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .sideProducts .name {
-    margin-right: 0.5rem;
-  }
-  
-  .sideProducts .price {
-    background-color: #3b82f6; /* Blue background for price */
-    color: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-  }
-  
+  padding: 2rem 1rem;
+  margin-top: 5rem;
+  margin-bottom: 5rem; /* Adds space to avoid overlap with the footer */
+  display: flex;
+  justify-content: center;
+  min-height: 600px; /* Ensures the grid takes up proper space */
+  background-color: #000; /* Matches the background color */
+  color: #fff;
+}
+
+.gridContainer {
+  width: 1101px;
+  height: 457px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  max-width: 100%;
+}
+
+.sideProducts {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+/* Main Product Styling */
+.mainProduct {
+  position: relative;
+}
+
+.imageWrapper {
+  border: 1px solid transparent;
+  transition: all 0.3s ease-in-out;
+  height: 90%;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.imageWrapper:hover {
+  border-color: #3b82f6; /* Blue border on hover */
+}
+
+.group:hover .image {
+  transform: scale(1.05); /* Scale effect on hover */
+}
+
+.info {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.name {
+  margin-right: 0.5rem;
+}
+
+.price {
+  background-color: #3b82f6; /* Blue background for price */
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+}
+
+/* Side Product Styling */
+.sideProduct {
+  position: relative;
+}
+
+.sideProducts .imageWrapper {
+  border: 1px solid transparent;
+  transition: all 0.3s ease-in-out;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.sideProducts .image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.sideProducts .imageWrapper:hover {
+  border-color: #3b82f6; /* Blue border on hover */
+}
+
+.sideProducts .group:hover .image {
+  transform: scale(1.05); /* Scale effect on hover */
+}
+
+.sideProducts .info {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sideProducts .name {
+  margin-right: 0.5rem;
+}
+
+.sideProducts .price {
+  background-color: #3b82f6; /* Blue background for price */
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+}
+
+/* QR Code Section */
+.qrCodeSection {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.qrCodeLabel {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Cart Drawer */
+.drawer {
+  position: fixed;
+  top: 0;
+  right: -300px; /* Hidden by default */
+  width: 300px;
+  height: 100%;
+  background-color: #121212;
+  color: white;
+  transition: right 0.3s ease-in-out;
+  padding: 1rem;
+  z-index: 1000;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.drawer.open {
+  right: 0; /* Show drawer */
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.emptyCart {
+  text-align: center;
+  color: #aaa;
+}
+
+.cartItems {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cartItem {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.cartItem .image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.cartItem .name {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.cartItem .price {
+  color: #aaa;
+  font-size: 0.9rem;
+}

@@ -8,19 +8,19 @@ const ProductGrid = () => {
 
   const products = [
     {
-      id: 1,
+      id: "83 AC 94 13",
       name: "Circles T-Shirt",
       price: "$20.00 USD",
       image: "/images/t-shirt-1.png",
     },
     {
-      id: 2,
+      id: "05 3C E0 00",
       name: "Drawstring Bag",
       price: "$12.00 USD",
       image: "/images/bag-1-dark.png",
     },
     {
-      id: 3,
+      id: "E6 CF DF 00",
       name: "Cup",
       price: "$15.00 USD",
       image: "/images/cup-black.png",

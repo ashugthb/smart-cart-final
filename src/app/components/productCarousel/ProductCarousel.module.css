@@ -3,13 +3,15 @@
     overflow: hidden; /* Hide content outside the visible area */
     background-color: #000; /* Optional: match the background color in your UI */
     padding: 20px 0;
+    margin: 60px auto;
+    margin-top: 100px;
   }
   
   .carousel {
     display: flex;
     gap: 20px;
     animation: scrollLeft 20s linear infinite; /* Animate continuously to the left */
-    height: 100%; /* Ensure child elements inherit the full height */
+    height: 140%; /* Ensure child elements inherit the full height */
   }
   
   .product {
@@ -20,7 +22,7 @@
     transition: transform 0.3s ease, border-color 0.3s ease; /* Smooth scaling and border animation */
     border: 2px solid transparent; /* Initial border */
     padding: 10px;
-    height: 100%; /* Ensure products inherit container height */
+    height: 120%; /* Ensure products inherit container height */
   }
   
   .product:hover {
@@ -31,7 +33,7 @@
   .image {
     width: 100%;
     height: auto;
-    max-height: 200px; /* Limit image height to fit inside product card */
+    max-height: 140px; /* Limit image height to fit inside product card */
     object-fit: contain;
     transition: transform 0.3s ease; /* Smooth scaling */
   }
@@ -67,7 +69,7 @@
   /* Responsive height constraints */
   .carouselWrapper {
     max-height: 285px; /* Max height for large screens */
-    height: 100%; /* Ensure responsiveness */
+    height: 120%; /* Ensure responsiveness */
   }
   
   /* Smaller screen adjustments */
