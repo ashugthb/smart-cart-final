@@ -1,56 +1,99 @@
 "use client"
 
 import React, { useState } from 'react';
-import { useRouter } from "next/navigation";  // Import Next.js router
-import styles from './LoginPage.module.css';
+import { useRouter } from 'next/navigation';  // Correct import for Next.js routing
+import styles from './LoginPage.module.css'; // Make sure your CSS path is correct
 
 const LoginPage = () => {
-  const router = useRouter(); // Initialize Next.js router
-  const [isManager, setIsManager] = useState(false); // Toggle between User and Manager
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
+  const router = useRouter();
+  const [isManager, setIsManager] = useState(false);
+  const [isLogin, setIsLogin] = useState(true); // Toggle between Login and Registration
+  const [credentials, setCredentials] = useState({
+    username: '',
+    password: '',
+    name: '' // Added for registration
+  });
   const [error, setError] = useState('');
 
-  // Dummy stored users and managers
-  const users = [
-    { username: 'user1', password: 'password1' },
-    { username: 'user2', password: 'password2' },
-  ];
-
-  const managers = [
-    { username: 'manager1', password: 'managerpass1' },
-    { username: 'manager2', password: 'managerpass2' },
-  ];
-
-  // Handle input changes
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setCredentials({ ...credentials, [name]: value });
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setCredentials(prevCredentials => ({
+      ...prevCredentials,
+      [name]: value
+    }));
   };
-
-  // Handle login submission
-  const handleLogin = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setError('');
 
-    const accountList = isManager ? managers : users;
-    const account = accountList.find(
-      (acc) => acc.username === credentials.username && acc.password === credentials.password
-    );
+    if (isLogin) {
+      // Login logic
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: credentials.username,
+          password: credentials.password,
+          isManager: isManager
+        })
+      });
 
-    if (account) {
-      // Redirect to '/' route
-      router.push('/'); // Redirect to homepage
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data)
+        localStorage.setItem('token', data.token); // Storing the token in localStorage (consider using a more secure method)
+        router.push('/');  // Redirect to homepage or dashboard
+      } else {
+        const data = await response.json();
+        console.log(data)
+        setError(data.error || 'Invalid username or password');
+      }
     } else {
-      setError('Invalid username or password');
+      // Registration logic
+      const response = await fetch('/api/register/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: credentials.name,
+          username: credentials.username,
+          password: credentials.password,
+          isManager: isManager
+        })
+      });
+
+      if (response.ok) {
+        setIsLogin(true);  // Switch to login after successful registration
+        setCredentials({ username: '', password: '', name: '' }); // Clear form
+        alert('Registration successful, please log in.'); // Notify user
+      } else {
+        const data = await response.json();
+        setError(data.error || 'Registration failed');
+      }
     }
   };
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>
-        {isManager ? 'Manager Login' : 'User Login'}
-      </h1>
-      <form className={styles.form} onSubmit={handleLogin}>
+      <h1>{isLogin ? (isManager ? 'Manager Login' : 'User Login') : (isManager ? 'Manager Registration' : 'User Registration')}</h1>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        {!isLogin && (
+          <div className={styles.formGroup}>
+            <label htmlFor="name">Name:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={credentials.name}
+              onChange={handleInputChange}
+              className={styles.input}
+              required
+            />
+          </div>
+        )}
         <div className={styles.formGroup}>
           <label htmlFor="username">Username:</label>
           <input
@@ -77,14 +120,20 @@ const LoginPage = () => {
         </div>
         {error && <p className={styles.error}>{error}</p>}
         <button type="submit" className={styles.button}>
-          Login
+          {isLogin ? 'Login' : 'Register'}
         </button>
       </form>
       <button
         className={styles.toggleButton}
         onClick={() => setIsManager(!isManager)}
       >
-        Switch to {isManager ? 'User' : 'Manager'} Login
+        Switch to {isManager ? 'User' : 'Manager'} {isLogin ? 'Login' : 'Registration'}
+      </button>
+      <button
+        className={styles.toggleButton}
+        onClick={() => setIsLogin(!isLogin)}
+      >
+        {isLogin ? 'Register' : 'Login'}
       </button>
     </div>
   );

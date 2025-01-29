@@ -2,9 +2,9 @@
 import React from "react";
 import { useRouter } from 'next/navigation'// Correct module for App Router
 import styles from "./ProductGrid.module.css";
+import Products from "../../../../Sample";
 
 const ProductGrid = () => {
-  const router = useRouter();
 
   const products = [
     {
@@ -26,7 +26,11 @@ const ProductGrid = () => {
       image: "/images/cup-black.png",
     },
   ];
+  const router = useRouter();
+  // var products = Products();
 
+  // products = [initialProducts]
+  // products = [initialProducts, ...products,]
   // Handler to navigate to the product page
   const handleProductClick = (productId) => {
     router.push(`/product/${productId}`);
