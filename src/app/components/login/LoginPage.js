@@ -1,17 +1,17 @@
 "use client"
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';  // Correct import for Next.js routing
-import styles from './LoginPage.module.css'; // Make sure your CSS path is correct
+import { useRouter } from 'next/navigation';
+import styles from './LoginPage.module.css';
 
 const LoginPage = () => {
   const router = useRouter();
   const [isManager, setIsManager] = useState(false);
-  const [isLogin, setIsLogin] = useState(true); // Toggle between Login and Registration
+  const [isLogin, setIsLogin] = useState(true);
   const [credentials, setCredentials] = useState({
     username: '',
     password: '',
-    name: '' // Added for registration
+    name: ''
   });
   const [error, setError] = useState('');
 
@@ -43,8 +43,8 @@ const LoginPage = () => {
       if (response.ok) {
         const data = await response.json();
         console.log(data)
-        localStorage.setItem('token', data.token); // Storing the token in localStorage (consider using a more secure method)
-        router.push('/');  // Redirect to homepage or dashboard
+        localStorage.setItem('token', data.token);
+        router.push('/');
       } else {
         const data = await response.json();
         console.log(data)
@@ -66,9 +66,9 @@ const LoginPage = () => {
       });
 
       if (response.ok) {
-        setIsLogin(true);  // Switch to login after successful registration
-        setCredentials({ username: '', password: '', name: '' }); // Clear form
-        alert('Registration successful, please log in.'); // Notify user
+        setIsLogin(true);
+        setCredentials({ username: '', password: '', name: '' });
+        alert('Registration successful, please log in.');
       } else {
         const data = await response.json();
         setError(data.error || 'Registration failed');

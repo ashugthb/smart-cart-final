@@ -1,71 +1,117 @@
 .dashboard {
-  background-color: #121212; /* Dark theme inspired by image */
-  color: #ffffff;
-  padding: 2rem;
-  max-width: 600px;
-  margin: 2rem auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    background-color: #121212;
+    /* Dark theme inspired by image */
+    color: #ffffff;
+    padding: 2rem;
+    max-width: 600px;
+    margin: 2rem auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .title {
-  text-align: center;
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
-  color: #ffffff;
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
 }
 
 .form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 .formGroup {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .formGroup label {
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  color: #aaa;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #aaa;
 }
 
 .input,
 .textarea,
 .inputFile {
-  padding: 0.8rem;
-  font-size: 1rem;
-  border: 1px solid #333;
-  border-radius: 4px;
-  background-color: #222;
-  color: #fff;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #222;
+    color: #fff;
 }
 
 .input:focus,
 .textarea:focus,
 .inputFile:focus {
-  border-color: #555;
-  outline: none;
+    border-color: #555;
+    outline: none;
 }
 
-.textarea {
-  resize: vertical;
-  height: 100px;
+.addButton:hover,
+.submitButton:hover {
+    background-color: #4a54e1;
 }
 
-.button {
-  background-color: #0066cc;
-  color: #fff;
-  border: none;
-  padding: 0.8rem;
-  font-size: 1.1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+.selectedSize {
+    display: inline-block;
+    background-color: #d6d6d6;
+    color: black;
+    margin-right: 5px;
 }
 
-.button:hover {
-  background-color: #004da0;
+.optionButton,
+.options {
+    display: inline-block;
+}
+
+.optionButton {
+    background-color: #e7e7e7;
+    margin-right: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.optionButton.selectedOption,
+.optionButton:hover {
+    background-color: #d7d7f2;
+}
+
+.options {
+    display: flex;
+    gap: 10px;
+}
+
+.thumbnailWrapper,
+.thumbnailButton {
+    display: inline-block;
+    margin-right: 10px;
+    border: none;
+    background: none;
+}
+
+.thumbnailImage {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.mainImageWrapper {
+    margin-bottom: 20px;
+}
+
+.mainImage {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+}
+
+.size {
+    display: inline-block;
 }
