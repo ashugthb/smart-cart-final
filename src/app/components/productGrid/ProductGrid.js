@@ -1,7 +1,8 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Grid, Typography, Box, useTheme, ButtonBase } from "@mui/material";
+import { Grid, Typography, Box, useTheme, ButtonBase, Button } from "@mui/material";
+import LoadingSkeleton from "./LoadingSkeleton";
 
 const ProductCard = ({ product, isFeatured = false, onClick }) => {
   const theme = useTheme();
@@ -36,7 +37,7 @@ const ProductCard = ({ product, isFeatured = false, onClick }) => {
         >
           <Box
             component="img"
-            src={product.image}
+            src={Object.values(product.colors)[0]} // Use first color image
             alt={product.name}
             sx={{
               width: "100%",
@@ -77,10 +78,6 @@ const ProductCard = ({ product, isFeatured = false, onClick }) => {
                 },
                 flex: 1,
                 fontFamily: theme.typography.fontFamily,
-                ...(isFeatured && {
-                  textTransform: { xs: 'none', md: 'uppercase' },
-                  letterSpacing: { md: '0.5px' }
-                })
               }}
             >
               {product.name}
@@ -104,7 +101,7 @@ const ProductCard = ({ product, isFeatured = false, onClick }) => {
                 boxShadow: theme.shadows[1],
               }}
             >
-              {product.price}
+              ${Number(product.price).toLocaleString('en-US')} USD
             </Typography>
           </Box>
         </Box>
@@ -116,69 +113,58 @@ const ProductCard = ({ product, isFeatured = false, onClick }) => {
 const ProductGrid = () => {
   const router = useRouter();
   const theme = useTheme();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const products = [
-    {
-      id: "83 AC 94 13",
-      name: "Circles T-Shirt",
-      price: "$20.00 USD",
-      image: "/images/t-shirt-1.png",
-      featured: true,
-    },
-    {
-      id: "05 3C E0 00",
-      name: "Drawstring Bag",
-      price: "$12.00 USD",
-      image: "/images/bag-1-dark.png",
-      featured: false,
-    },
-    {
-      id: "05 3C E0 01",
-      name: "Ceramic Mug",
-      price: "$15.00 USD",
-      image: "/images/mug.avif",
-      featured: false,
-    },
-    {
-      id: "E6 CF DF 00",
-      name: "Premium Cup",
-      price: "$15.00 USD",
-      image: "/images/cup-black.png",
-      featured: true,
-    },
-    {
-      id: "GH 34 IK 56",
-      name: "Cotton Hoodie",
-      price: "$45.00 USD",
-      image: "/images/baby-onesie-beige-1.png",
-      featured: false,
-    },
-    {
-      id: "MUG-001",
-      name: "Porcelain Mug",
-      price: "$15.00 USD",
-      image: "/images/mug.avif",
-      featured: false,
-    },
-    {
-      id: "ONESIE-01",
-      name: "Baby Onesie",
-      price: "$10.00 USD",
-      image: "/images/baby-onesie-beige-1.png",
-      featured: false,
-    },
-    {
-      id: "CAP-001",
-      name: "Infant Cap",
-      price: "$10.00 USD",
-      image: "/images/hoodie.png",
-      featured: false,
-    },
-  ];
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/products');
+        if (!response.ok) throw new Error('Failed to fetch products');
+        const data = await response.json();
+        setProducts(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const handleProductClick = (productId) => {
     router.push(`/product/${productId}`);
   };
+
+  if (loading) return <LoadingSkeleton />;
+
+  if (error) return (
+    <Box sx={{
+      p: 3,
+      textAlign: 'center',
+      minHeight: '50vh',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }}>
+      <Typography variant="h6" color="error" gutterBottom>
+        ⚠️ Error loading products
+      </Typography>
+      <Typography variant="body2" gutterBottom sx={{ mb: 2 }}>
+        {error}
+      </Typography>
+      <Button
+        variant="contained"
+        onClick={() => window.location.reload()}
+        sx={{ mt: 1 }}
+      >
+        Try Again
+      </Button>
+    </Box>
+  );
 
   return (
     <Box
@@ -203,7 +189,7 @@ const ProductGrid = () => {
           <ProductCard
             key={product.id}
             product={product}
-            isFeatured={product.featured}
+            isFeatured={product.category === 'electronics'} // Example featured logic
             onClick={() => handleProductClick(product.id)}
           />
         ))}

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
@@ -32,7 +32,38 @@ const LoginPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError('');
-    // Keep your existing API call logic here
+
+    try {
+      const endpoint = isLogin ? 'login' : 'register';
+      const body = isLogin ? {
+        username: credentials.username,
+        password: credentials.password
+      } : {
+        name: credentials.name,
+        username: credentials.username,
+        password: credentials.password,
+        role: isManager ? 'manager' : 'user'
+      };
+
+      const response = await fetch(`/api/auth`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Authentication failed');
+      }
+
+      // Store token and redirect
+      localStorage.setItem('token', data.token);
+      router.push(data.role === 'manager' ? '/dashboard/manager' : '/');
+    } catch (error) {
+      setError(error.message);
+      console.error('Authentication error:', error);
+    }
   };
 
   return (

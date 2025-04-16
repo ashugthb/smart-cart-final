@@ -1,6 +1,7 @@
 import localFont from 'next/font/local';
 import { ThemeProvider } from '../providers/ThemeProvider';
 import MUIWrapper from './MUIWrapper';
+import StoreProvider from '../app/store/StoreProvider';
 import './globals.css';
 
 const geistSans = localFont({
@@ -25,9 +26,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider>
-          <MUIWrapper>
-            {children}
-          </MUIWrapper>
+          <StoreProvider>
+            <MUIWrapper>
+              {children}
+            </MUIWrapper>
+          </StoreProvider>
         </ThemeProvider>
       </body>
     </html>

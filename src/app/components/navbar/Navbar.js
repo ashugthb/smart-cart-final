@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSelector } from 'react-redux';
+import { useTheme } from '@mui/material/styles';
 import {
   AppBar,
   Toolbar,
@@ -13,7 +15,8 @@ import {
   List,
   ListItem,
   ListItemButton,
-  Divider
+  Divider,
+  Badge
 } from "@mui/material";
 import {
   Search,
@@ -25,15 +28,22 @@ import {
   Brightness7,
   Menu
 } from "@mui/icons-material";
-import { useTheme } from '../../../providers/ThemeProvider';
+import { useTheme as useAppTheme } from '../../../providers/ThemeProvider';
+import CartDialog from './CartDialog'; // Make sure path is correct
 
 const NavBar = () => {
   const router = useRouter();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { mode, toggleTheme } = useTheme();
+  const theme = useTheme(); // MUI theme
+  const { mode, toggleTheme } = useAppTheme(); // Custom theme
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false); // New state for cart dialog
+
+  // Get cart quantity from Redux store
+  const cartQuantity = useSelector((state) => state.cart.totalQuantity);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -49,7 +59,10 @@ const NavBar = () => {
 
   const handleHomeRoute = () => router.push("/");
   const handleAddProduct = () => router.push("/addProduct");
-  const handleProductsRoute = () => router.push("/product-list");
+  const handleProductsRoute = () => {
+    console.log("hellooooooooooooooo")
+    router.push("/product-list");
+  }
 
   const handleLogin = () => {
     if (isLoggedIn) {
@@ -76,7 +89,7 @@ const NavBar = () => {
         </ListItem>
         <ListItem disablePadding>
           <ListItemButton onClick={handleProductsRoute}>
-            <Typography>All Products</Typography>
+            <Typography>MY List </Typography>
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
@@ -164,7 +177,7 @@ const NavBar = () => {
                 "&:hover": { bgcolor: 'action.hover' }
               }}
             >
-              Products
+              My List
             </Button>
             <Button
               color="inherit"
@@ -262,8 +275,26 @@ const NavBar = () => {
               </form>
             </Box>
 
-            <IconButton sx={{ color: 'text.primary', display: { xs: 'none', md: 'flex' } }}>
-              <ShoppingCart />
+            {/* Cart Icon with Badge */}
+            <IconButton
+              sx={{ color: 'text.primary', display: { xs: 'none', md: 'flex' } }}
+              onClick={() => setCartOpen(true)}
+            >
+              <Badge
+                badgeContent={cartQuantity}
+                color="error"
+                overlap="circular"
+                sx={{
+                  '& .MuiBadge-badge': {
+                    right: -3,
+                    top: 13,
+                    border: `2px solid ${theme.palette.background.paper}`,
+                    padding: '0 4px'
+                  }
+                }}
+              >
+                <ShoppingCart />
+              </Badge>
             </IconButton>
 
             <IconButton onClick={toggleTheme} color="inherit">
@@ -297,6 +328,9 @@ const NavBar = () => {
           </Box>
         </Toolbar>
       </AppBar>
+
+      {/* Cart Dialog */}
+      <CartDialog open={cartOpen} onClose={() => setCartOpen(false)} />
 
       {/* Mobile Drawer */}
       <Drawer
