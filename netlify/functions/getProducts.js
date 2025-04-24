@@ -6,11 +6,11 @@ const { faker } = require('@faker-js/faker');
 const generateProducts = (count) => {
     const colors = ['red', 'blue', 'green', 'purple', 'orange'];
     const colorImages = {
-        red: 'https://images.unsplash.com/photo-1617150154344-0a04a989f375',
-        blue: 'https://images.unsplash.com/photo-1555685812-87ab2c49a3ec',
-        green: 'https://images.unsplash.com/photo-1548098453-478d21f6c788',
-        purple: 'https://images.unsplash.com/photo-1578009409443-7b1190b0ca4d',
-        orange: 'https://images.unsplash.com/photo-1537045033170-e08d759b861f',
+        red: 'https://picsum.photos/200/300?random=1',
+        blue: 'https://picsum.photos/200/300?random=2',
+        green: 'https://picsum.photos/200/300?random=3',
+        purple: 'https://picsum.photos/200/300?random=4',
+        orange: 'https://picsum.photos/200/300?random=5',
     };
 
     const products = [];
@@ -27,7 +27,7 @@ const generateProducts = (count) => {
             id: faker.string.uuid(),
             name: `${faker.commerce.productAdjective()} ${faker.commerce.product()}`,
             price: faker.commerce.price({ min: 10, max: 100, dec: 2 }),
-            image: colorImagesForProduct.red,
+            image: colorImagesForProduct.red,  // Default image (first color)
             colors: colorImagesForProduct,
             sizes: ['S', 'M', 'L'],
         });
