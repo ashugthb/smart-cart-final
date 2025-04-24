@@ -1,114 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Grid, Typography, Box, useTheme, ButtonBase, Button } from "@mui/material";
+import { Grid, Box, Typography, ButtonBase, useTheme, Button } from "@mui/material";
 import LoadingSkeleton from "./LoadingSkeleton";
-
-const ProductCard = ({ product, isFeatured = false, onClick }) => {
-  const theme = useTheme();
-
-  return (
-    <Grid item xs={6} sm={4} md={isFeatured ? 8 : 4} sx={{ position: "relative" }}>
-      <ButtonBase
-        onClick={onClick}
-        sx={{
-          width: "100%",
-          height: "100%",
-          borderRadius: theme.shape.borderRadius,
-          overflow: "hidden",
-          transition: "transform 0.3s ease",
-          "&:hover": {
-            transform: "scale(0.98)",
-            "& img": {
-              transform: "scale(1.1)",
-            },
-          },
-        }}
-      >
-        <Box
-          sx={{
-            position: "relative",
-            width: "100%",
-            height: isFeatured ? { xs: 200, sm: 300, md: 500 } : 180,
-            border: `1px solid ${theme.palette.divider}`,
-            borderRadius: theme.shape.borderRadius,
-            overflow: "hidden",
-          }}
-        >
-          <Box
-            component="img"
-            src={Object.values(product.colors)[0]} // Use first color image
-            alt={product.name}
-            sx={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              transition: "transform 0.3s ease",
-            }}
-          />
-          <Box
-            sx={{
-              position: "absolute",
-              bottom: theme.spacing(1),
-              left: theme.spacing(1),
-              right: theme.spacing(1),
-              bgcolor: 'rgba(0, 0, 0, 0.7)',
-              backdropFilter: { xs: 'none', sm: 'blur(4px)' },
-              px: 1,
-              py: 1,
-              borderRadius: theme.shape.borderRadius,
-              display: "flex",
-              flexDirection: { xs: 'column', sm: 'row' },
-              justifyContent: "space-between",
-              alignItems: { xs: 'flex-start', sm: 'center' },
-              gap: 0.5,
-              boxShadow: theme.shadows[1],
-            }}
-          >
-            <Typography
-              variant="body2"
-              sx={{
-                fontWeight: 600,
-                color: theme.palette.common.white,
-                lineHeight: 1.2,
-                fontSize: {
-                  xs: '0.75rem',
-                  sm: '0.875rem',
-                  md: isFeatured ? '1rem' : '0.875rem'
-                },
-                flex: 1,
-                fontFamily: theme.typography.fontFamily,
-              }}
-            >
-              {product.name}
-            </Typography>
-            <Typography
-              variant="caption"
-              sx={{
-                bgcolor: theme.palette.primary.main,
-                color: theme.palette.primary.contrastText,
-                px: 1,
-                py: 0.25,
-                borderRadius: theme.shape.borderRadius,
-                fontWeight: 600,
-                fontSize: {
-                  xs: '0.65rem',
-                  sm: '0.75rem',
-                  md: '0.875rem'
-                },
-                whiteSpace: 'nowrap',
-                lineHeight: 1.2,
-                boxShadow: theme.shadows[1],
-              }}
-            >
-              ${Number(product.price).toLocaleString('en-US')} USD
-            </Typography>
-          </Box>
-        </Box>
-      </ButtonBase>
-    </Grid>
-  );
-};
 
 const ProductGrid = () => {
   const router = useRouter();
@@ -120,7 +14,7 @@ const ProductGrid = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:3001/products');
+        const response = await fetch('/.netlify/functions/getProducts');
         if (!response.ok) throw new Error('Failed to fetch products');
         const data = await response.json();
         setProducts(data);
@@ -186,12 +80,91 @@ const ProductGrid = () => {
         }}
       >
         {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            isFeatured={product.category === 'electronics'} // Example featured logic
-            onClick={() => handleProductClick(product.id)}
-          />
+          <Grid item xs={6} sm={4} md={3} sx={{ position: "relative", mt: 9, mx: 3 }} key={product.id}>
+            <ButtonBase
+              onClick={() => handleProductClick(product.id)}
+              sx={{
+                px: 1,
+                width: "100%",
+                height: "100%",
+                borderRadius: theme.shape.borderRadius,
+                overflow: "hidden",
+                transition: "transform 0.3s ease",
+                boxShadow: theme.shadows[2],
+                "&:hover": {
+                  transform: "scale(1.02)",
+                  boxShadow: theme.shadows[8],
+                  "& img": {
+                    transform: "scale(1.05)",
+                  },
+                },
+              }}
+            >
+              <Box
+                sx={{
+                  position: "relative",
+                  width: "100%",
+                  height: 220, // Keep the image height fixed as in the previous version
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: theme.shape.borderRadius,
+                  overflow: "hidden",
+                }}
+              >
+                <Box
+                  component="img"
+                  src={Object.values(product.colors)[1]} // Use first color image
+                  alt={product.name}
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    transition: "transform 0.3s ease",
+                  }}
+                />
+              </Box>
+            </ButtonBase>
+            {/* Product Name and Price Section */}
+            <Box
+              sx={{
+                px: 2,
+                py: 0.1, // Reduce the padding on the top and bottom for less gap
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
+                gap: 0.6, // Reduce gap between name and price
+              }}
+            >
+              <Typography
+                variant="body2"
+                sx={{
+                  mt: 0.7,
+                  fontWeight: 600,
+                  color: theme.palette.text.primary,
+                  lineHeight: 1.2,
+                  fontSize: { xs: '0.85rem', sm: '1rem', md: '1.1rem' },
+                  mb: 0.25,  // Reduce bottom margin
+                }}
+              >
+                {product.name}
+              </Typography>
+              <Typography
+                variant="caption"
+                sx={{
+                  bgcolor: theme.palette.primary.main,
+                  color: theme.palette.primary.contrastText,
+                  px: 1.5,
+                  py: 0.5,
+                  borderRadius: theme.shape.borderRadius,
+                  fontWeight: 600,
+                  fontSize: { xs: '0.75rem', sm: '0.875rem', md: '1rem' },
+                  whiteSpace: 'nowrap',
+                  lineHeight: 1.2,
+                }}
+              >
+                ${Number(product.price).toLocaleString('en-US')} USD
+              </Typography>
+            </Box>
+          </Grid>
         ))}
       </Grid>
     </Box>
