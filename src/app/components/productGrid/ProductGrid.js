@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Grid, Box, Typography, ButtonBase, useTheme, Button } from "@mui/material";
@@ -80,7 +80,7 @@ const ProductGrid = () => {
         }}
       >
         {products.map((product) => (
-          <Grid item xs={6} sm={4} md={3} sx={{ position: "relative", mt: 9, mx: 3 }} key={product.id}>
+          <Grid item xs={2.4} sm={2.4} md={2.4} sx={{ position: "relative", mt: 9, mx: 3 }} key={product.id}>
             <ButtonBase
               onClick={() => handleProductClick(product.id)}
               sx={{
@@ -104,7 +104,7 @@ const ProductGrid = () => {
                 sx={{
                   position: "relative",
                   width: "100%",
-                  height: 220, // Keep the image height fixed as in the previous version
+                  height: 220,
                   border: `1px solid ${theme.palette.divider}`,
                   borderRadius: theme.shape.borderRadius,
                   overflow: "hidden",
@@ -112,7 +112,7 @@ const ProductGrid = () => {
               >
                 <Box
                   component="img"
-                  src={Object.values(product.colors)[1]} // Use first color image
+                  src={Object.values(product.colors)[0]} // Use first color image
                   alt={product.name}
                   sx={{
                     width: "100%",
@@ -127,11 +127,11 @@ const ProductGrid = () => {
             <Box
               sx={{
                 px: 2,
-                py: 0.1, // Reduce the padding on the top and bottom for less gap
+                py: 0.1,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-start',
-                gap: 0.6, // Reduce gap between name and price
+                gap: 0.6,
               }}
             >
               <Typography
@@ -142,7 +142,7 @@ const ProductGrid = () => {
                   color: theme.palette.text.primary,
                   lineHeight: 1.2,
                   fontSize: { xs: '0.85rem', sm: '1rem', md: '1.1rem' },
-                  mb: 0.25,  // Reduce bottom margin
+                  mb: 0.25,
                 }}
               >
                 {product.name}
