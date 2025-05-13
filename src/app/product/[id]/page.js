@@ -32,20 +32,28 @@ const ProductPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        if (!params?.id) return;
-        console.log(params?.id, "parameter id")
+    if (!params.id) return;
 
-        const response = await fetch(`/.netlify/functions/getProducts?id=${params.id}`);
-        if (!response.ok) throw new Error('Product not found');
+    const fetchProduct = async () => {
+      const url = `/.netlify/functions/getProducts?id=${params.id}`;
+      console.log("🕵️‍♂️ fetching product for id:", params.id);
+      console.log(" → request URL:", url);
+
+      try {
+        const response = await fetch(url);
+        console.log(" ← status:", response.status);
 
         const data = await response.json();
-        console.log(data, "response data")
-        setProduct(data);
-        setSelectedColor(Object.keys(data.colors)[1]); // Set first color as default
-        setSelectedSize(data.sizes[0]); // Set first size as default
+        console.log(" ← response data:", data);
+
+        if (!response.ok) {
+          // if the function returned a 404 or 400
+          setError(data.message || "Unknown error");
+        } else {
+          setProduct(data);
+        }
       } catch (err) {
+        console.error("Fetch error:", err);
         setError(err.message);
       } finally {
         setLoading(false);
