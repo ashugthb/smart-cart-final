@@ -15,43 +15,49 @@ import {
   useMediaQuery
 } from "@mui/material";
 import QRCode from "react-qr-code";
-import { useDispatch } from 'react-redux';
-import { addItem } from '../../store/slices/cartSlice';
+import { useDispatch } from "react-redux";
+import { addItem } from "@/store/slices/cartSlice";
 import NavBar from "@/app/components/navbar/Navbar";
 import Footer from "@/app/components/footer/Footer";
+import LoadingSkeleton from "@/app/components/LoadingSkeleton";
 
 const ProductPage = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const params = useParams();
-  const [selectedColor, setSelectedColor] = useState("Black");
-  const [selectedSize, setSelectedSize] = useState("M");
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const { id } = useParams();
+
   const [product, setProduct] = useState(null);
+  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedSize, setSelectedSize] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!params.id) return;
+    if (!id) return;
 
     const fetchProduct = async () => {
-      const url = `/.netlify/functions/getProducts?id=${params.id}`;
-      console.log("🕵️‍♂️ fetching product for id:", params.id);
-      console.log(" → request URL:", url);
+      const url = `/.netlify/functions/getProducts?id=${id}`;
+      console.log("🕵️ fetching product for id:", id);
+      console.log(" → URL:", url);
 
       try {
         const response = await fetch(url);
         console.log(" ← status:", response.status);
 
         const data = await response.json();
-        console.log(" ← response data:", data);
+        console.log(" ← data:", data);
 
         if (!response.ok) {
-          // if the function returned a 404 or 400
-          setError(data.message || "Unknown error");
-        } else {
-          setProduct(data);
+          throw new Error(data.message || "Unknown error");
         }
+
+        setProduct(data);
+
+        // pick the first available color & size
+        const colors = Object.keys(data.colors || {});
+        if (colors.length) setSelectedColor(colors[0]);
+        if (data.sizes?.length) setSelectedSize(data.sizes[0]);
       } catch (err) {
         console.error("Fetch error:", err);
         setError(err.message);
@@ -61,79 +67,23 @@ const ProductPage = () => {
     };
 
     fetchProduct();
-  }, [params.id]);
-
-
-  // useEffect(() => {
-  //   if (!params.id) return;
-
-  //   console.log("🕵️‍♂️ fetching product for id:", params.id);
-  //   const url = `/.netlify/functions/getProducts?id=${params.id}`;
-  //   console.log(" → request URL:", url);
-
-  //   fetch(url)
-  //     .then(res => {
-  //       console.log(" ← status:", res.status);
-  //       return res.json();
-  //     })
-  //     .then(data => {
-  //       console.log(" ← response data:", data);
-  //       if (res.ok) {
-  //         setProduct(data);
-  //       } else {
-  //         setError(data.message || "Unknown error");
-  //       }
-  //     })
-  //     .catch(err => {
-  //       console.error("Fetch error:", err);
-  //       setError(err.message);
-  //     })
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  // }, [params.id]);
-
-  const handleAddToCart = () => {
-    if (!product) return;
-
-    const cartItem = {
-      id: `${product.id}-${selectedColor}-${selectedSize}`,
-      productId: product.id,
-      name: product.name,
-      price: product.price,
-      color: selectedColor,
-      size: selectedSize,
-      image: product.colors[selectedColor],
-      quantity: 1,
-    };
-    dispatch(addItem(cartItem));
-  };
+  }, [id]);
 
   if (loading) {
-    return (
-      <Container maxWidth="md" sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        p: 3
-      }}>
-        <Typography variant="h6" color="text.primary">
-          Loading product...
-        </Typography>
-      </Container>
-    );
+    return <LoadingSkeleton />;
   }
 
   if (error) {
     return (
-      <Container maxWidth="md" sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        p: 3
-      }}>
+      <Container
+        sx={{
+          minHeight: "50vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          p: 3
+        }}
+      >
         <Typography variant="h6" color="error">
           Error: {error}
         </Typography>
@@ -143,101 +93,113 @@ const ProductPage = () => {
 
   if (!product) {
     return (
-      <Container maxWidth="md" sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        p: 3
-      }}>
-        <Typography variant="h6" color="text.primary">
-          Product not found
-        </Typography>
+      <Container
+        sx={{
+          minHeight: "50vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          p: 3
+        }}
+      >
+        <Typography variant="h6">Product not found</Typography>
       </Container>
     );
   }
+
+  const handleAddToCart = () => {
+    dispatch(
+      addItem({
+        id: `${product.id}-${selectedColor}-${selectedSize}`,
+        productId: product.id,
+        name: product.name,
+        price: product.price,
+        color: selectedColor,
+        size: selectedSize,
+        image: product.colors[selectedColor],
+        quantity: 1,
+      })
+    );
+  };
 
   const qrValue = JSON.stringify({
     name: product.name,
     price: product.price,
     color: selectedColor,
-    size: selectedSize
+    size: selectedSize,
   });
 
   return (
     <>
       <NavBar />
-      <Container maxWidth="lg" sx={{
-        py: 4,
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: 'background.default',
-        [theme.breakpoints.up('md')]: { justifyContent: 'center' }
-      }}>
+
+      <Container
+        maxWidth="lg"
+        sx={{
+          py: 4,
+          minHeight: "100vh",
+          bgcolor: "background.default"
+        }}
+      >
         <Grid container spacing={isMobile ? 2 : 4}>
-          {/* Product Images */}
+          {/* IMAGE + THUMBNAILS */}
           <Grid item xs={12} md={6}>
-            <Paper elevation={0} sx={{
-              p: 2,
-              borderRadius: 3,
-              bgcolor: 'background.paper',
-            }}>
-              <Box sx={{
-                width: '100%',
-                height: isMobile ? 300 : 400,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                bgcolor: theme.palette.mode === 'dark' ? '#1A1A1A' : '#F3F4F6',
-                borderRadius: 2,
-                mb: 2
-              }}>
+            <Paper
+              elevation={0}
+              sx={{
+                p: 2,
+                borderRadius: 3,
+                bgcolor: "background.paper"
+              }}
+            >
+              <Box
+                sx={{
+                  width: "100%",
+                  height: isMobile ? 300 : 400,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  bgcolor:
+                    theme.palette.mode === "dark" ? "#1A1A1A" : "#F3F4F6",
+                  borderRadius: 2,
+                  mb: 2
+                }}
+              >
                 <img
                   src={product.colors[selectedColor]}
                   alt={product.name}
                   style={{
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                    objectFit: 'contain',
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    objectFit: "contain"
                   }}
                 />
               </Box>
-
-              <Box sx={{
-                display: 'flex',
-                gap: 2,
-                overflowX: 'auto',
-                py: 1,
-                px: 1
-              }}>
-                {Object.keys(product.colors).map((color) => (
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 1,
+                  overflowX: "auto",
+                  py: 1
+                }}
+              >
+                {Object.entries(product.colors).map(([color, url]) => (
                   <Button
                     key={color}
+                    variant={
+                      selectedColor === color ? "contained" : "outlined"
+                    }
                     onClick={() => setSelectedColor(color)}
-                    variant="outlined"
-                    sx={{
-                      minWidth: 80,
-                      height: 80,
-                      p: 0.5,
-                      borderWidth: 2,
-                      borderColor: selectedColor === color ?
-                        'primary.main' : 'divider',
-                      borderRadius: 2,
-                      '&:hover': {
-                        borderColor: 'primary.light',
-                        backgroundColor: 'action.hover'
-                      }
-                    }}
+                    sx={{ minWidth: 60, height: 60, p: 0 }}
                   >
                     <img
-                      src={product.colors[color]}
+                      src={url}
                       alt={color}
                       style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        borderRadius: 6
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        borderRadius: 4
                       }}
                     />
                   </Button>
@@ -246,78 +208,46 @@ const ProductPage = () => {
             </Paper>
           </Grid>
 
-          {/* Product Details */}
+          {/* DETAILS & ADD TO CART */}
           <Grid item xs={12} md={3}>
-            <Box sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 3,
-              color: 'text.primary'
-            }}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
               <Typography variant="h4" fontWeight={600}>
                 {product.name}
               </Typography>
 
               <Typography variant="h5" fontWeight={600}>
-                ${Number(product.price).toFixed(2)}
+                ${product.price.toFixed(2)}
               </Typography>
 
+              {/* Color selector */}
               <Box>
-                <Typography variant="subtitle1" gutterBottom fontWeight={500}>
-                  Color
-                </Typography>
+                <Typography gutterBottom>Color</Typography>
                 <ToggleButtonGroup
                   value={selectedColor}
                   exclusive
                   fullWidth
-                  onChange={(e, newColor) => newColor && setSelectedColor(newColor)}
-                  sx={{ gap: 1 }}
+                  onChange={(_, v) => v && setSelectedColor(v)}
                 >
-                  {Object.keys(product.colors).map((color) => (
-                    <ToggleButton
-                      key={color}
-                      value={color}
-                      sx={{
-                        px: 2,
-                        py: 1,
-                        border: 1,
-                        borderColor: 'divider',
-                        borderRadius: 1,
-                        textTransform: 'capitalize',
-                        color: 'text.primary',
-                      }}
-                    >
-                      {color}
+                  {Object.keys(product.colors).map((c) => (
+                    <ToggleButton key={c} value={c}>
+                      {c}
                     </ToggleButton>
                   ))}
                 </ToggleButtonGroup>
               </Box>
 
+              {/* Size selector */}
               <Box>
-                <Typography variant="subtitle1" gutterBottom fontWeight={500}>
-                  Size
-                </Typography>
+                <Typography gutterBottom>Size</Typography>
                 <ToggleButtonGroup
                   value={selectedSize}
                   exclusive
                   fullWidth
-                  onChange={(e, newSize) => newSize && setSelectedSize(newSize)}
-                  sx={{ gap: 1 }}
+                  onChange={(_, v) => v && setSelectedSize(v)}
                 >
-                  {product.sizes.map((size) => (
-                    <ToggleButton
-                      key={size}
-                      value={size}
-                      sx={{
-                        px: 1.5,
-                        py: 0.5,
-                        border: 1,
-                        borderColor: 'divider',
-                        borderRadius: 1,
-                        color: 'text.primary',
-                      }}
-                    >
-                      {size}
+                  {product.sizes.map((s) => (
+                    <ToggleButton key={s} value={s}>
+                      {s}
                     </ToggleButton>
                   ))}
                 </ToggleButtonGroup>
@@ -332,53 +262,76 @@ const ProductPage = () => {
                 size="large"
                 fullWidth
                 onClick={handleAddToCart}
-                sx={{
-                  py: 2,
-                  borderRadius: 2,
-                  fontWeight: 600,
-                  fontSize: '1rem',
-                  '&:hover': {
-                    transform: 'translateY(-1px)',
-                    boxShadow: theme.shadows[3]
-                  }
-                }}
+                sx={{ py: 2, borderRadius: 2, fontWeight: 600 }}
               >
                 Add to Cart
               </Button>
             </Box>
           </Grid>
 
-          {/* QR Code Section */}
+          {/* QR + DETAILS */}
           <Grid item xs={12} md={3}>
-            <Paper elevation={0} sx={{
-              p: 3,
-              height: '100%',
-              borderRadius: 3,
-              bgcolor: 'background.paper',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 2
-            }}>
-              <Typography variant="h6" fontWeight={600} textAlign="center">
+            <Paper
+              elevation={0}
+              sx={{
+                p: 3,
+                borderRadius: 3,
+                bgcolor: "background.paper",
+                display: "flex",
+                flexDirection: "column",
+                gap: 2
+              }}
+            >
+              <Typography textAlign="center" fontWeight={600}>
                 Share Product
               </Typography>
-              <Box sx={{
-                bgcolor: theme.palette.mode === 'dark' ? '#1A1A1A' : '#F3F4F6',
-                p: 2,
-                borderRadius: 2,
-                display: 'flex',
-                justifyContent: 'center'
-              }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  p: 2,
+                  bgcolor:
+                    theme.palette.mode === "dark" ? "#1A1A1A" : "#F3F4F6",
+                  borderRadius: 2
+                }}
+              >
                 <QRCode
                   value={qrValue}
-                  size={isMobile ? 160 : 200}
-                  bgColor={theme.palette.mode === 'dark' ? '#1A1A1A' : '#F3F4F6'}
+                  size={isMobile ? 120 : 160}
                   fgColor={theme.palette.text.primary}
                 />
               </Box>
-              <Box>
-                <Typography variant="subtitle1" gutterBottom fontWeight={500}>
-                  Product Details
+              <Divider />
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 1.5
+                }}
+              >
+                <Typography variant="body2" color="text.secondary">
+                  Name:
+                </Typography>
+                <Typography variant="body2" fontWeight={500}>
+                  {product.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Price:
+                </Typography>
+                <Typography variant="body2" fontWeight={500}>
+                  ${product.price.toFixed(2)}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Color:
+                </Typography>
+                <Typography variant="body2" fontWeight={500}>
+                  {selectedColor}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Size:
+                </Typography>
+                <Typography variant="body2" fontWeight={500}>
+                  {selectedSize}
                 </Typography>
                 <Box sx={{
                   display: 'grid',
@@ -395,20 +348,10 @@ const ProductPage = () => {
           </Grid>
         </Grid>
       </Container>
+
       <Footer />
     </>
   );
 };
-
-const DetailItem = ({ label, value }) => (
-  <>
-    <Typography variant="body2" color="text.secondary">
-      {label}:
-    </Typography>
-    <Typography variant="body2" fontWeight={500}>
-      {value}
-    </Typography>
-  </>
-);
 
 export default ProductPage;
