@@ -4,13 +4,15 @@ const { faker } = require('@faker-js/faker');
 
 // 1️⃣ Generate once at startup and re-use across invocations
 const COLORS = ['red', 'blue', 'green', 'purple', 'orange'];
-const COLOR_IMAGES = {
-    red: 'https://picsum.photos/200/300?random=1',
-    blue: 'https://picsum.photos/200/300?random=2',
-    green: 'https://picsum.photos/200/300?random=3',
-    purple: 'https://picsum.photos/200/300?random=4',
-    orange: 'https://picsum.photos/200/300?random=5',
-};
+// const COLOR_IMAGES = {
+//     red: 'https://picsum.photos/200/300?random=1',
+//     blue: 'https://picsum.photos/200/300?random=2',
+//     green: 'https://picsum.photos/200/300?random=3',
+//     purple: 'https://picsum.photos/200/300?random=4',
+//     orange: 'https://picsum.photos/200/300?random=5',
+// };
+
+const COLOR_IMAGES = () => `https://picsum.photos/400/300?random=${Math.floor(Math.random() * 1000)}`;
 
 function generateProducts(count) {
     return Array.from({ length: count }).map(() => {

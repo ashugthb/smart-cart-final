@@ -31,26 +31,57 @@ const ProductPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // useEffect(() => {
+  //   const fetchProduct = async () => {
+  //     try {
+  //       if (!params?.id) return;
+  //       console.log(params?.id,"parameter id")
+
+  //       const response = await fetch(`https://smart-cart-minorproject.netlify.app/.netlify/functions/getProducts?id=${params.id}`);
+  //       if (!response.ok) throw new Error('Product not found');
+
+  //       const data = await response.json();
+  //       setProduct(data);
+  //       setSelectedColor(Object.keys(data.colors)[1]); // Set first color as default
+  //       setSelectedSize(data.sizes[0]); // Set first size as default
+  //     } catch (err) {
+  //       setError(err.message);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchProduct();
+  // }, [params.id]);
+
+
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        if (!params?.id) return;
+    if (!params.id) return;
 
-        const response = await fetch(`/.netlify/functions/getProduct?id=${params.id}`);
-        if (!response.ok) throw new Error('Product not found');
+    console.log("🕵️‍♂️ fetching product for id:", params.id);
+    const url = `/.netlify/functions/getProducts?id=${params.id}`;
+    console.log(" → request URL:", url);
 
-        const data = await response.json();
-        setProduct(data);
-        setSelectedColor(Object.keys(data.colors)[1]); // Set first color as default
-        setSelectedSize(data.sizes[0]); // Set first size as default
-      } catch (err) {
+    fetch(url)
+      .then(res => {
+        console.log(" ← status:", res.status);
+        return res.json();
+      })
+      .then(data => {
+        console.log(" ← response data:", data);
+        if (res.ok) {
+          setProduct(data);
+        } else {
+          setError(data.message || "Unknown error");
+        }
+      })
+      .catch(err => {
+        console.error("Fetch error:", err);
         setError(err.message);
-      } finally {
+      })
+      .finally(() => {
         setLoading(false);
-      }
-    };
-
-    fetchProduct();
+      });
   }, [params.id]);
 
   const handleAddToCart = () => {
