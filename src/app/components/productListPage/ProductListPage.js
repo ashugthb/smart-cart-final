@@ -152,7 +152,7 @@ const WishlistManager = () => {
                                 {product.name}
                             </Typography>
                             {product.price && (
-                                <Typography variant="body1" sx={{ color: 'primary.main', fontWeight: 600, mb: 2 }}>
+                                <Typography variant="body1" sx={{ color: 'text.primary', fontWeight: 600, mb: 2 }}>
                                     {product.price}
                                 </Typography>
                             )}
