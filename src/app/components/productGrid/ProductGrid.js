@@ -29,7 +29,7 @@ const ProductGrid = () => {
   }, []);
 
   const handleProductClick = (productId) => {
-    router.push(`/product/${productId}`);
+    router.push(`/products/${productId}`);
   };
 
   if (loading) return <LoadingSkeleton />;
