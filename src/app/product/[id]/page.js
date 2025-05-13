@@ -36,12 +36,12 @@ const ProductPage = () => {
       try {
         if (!params?.id) return;
 
-        const response = await fetch(`http://localhost:3001/products/${params.id}`);
+        const response = await fetch(`/.netlify/functions/getProduct?id=${params.id}`);
         if (!response.ok) throw new Error('Product not found');
 
         const data = await response.json();
         setProduct(data);
-        setSelectedColor(Object.keys(data.colors)[0]); // Set first color as default
+        setSelectedColor(Object.keys(data.colors)[1]); // Set first color as default
         setSelectedSize(data.sizes[0]); // Set first size as default
       } catch (err) {
         setError(err.message);
