@@ -66,7 +66,7 @@ exports.handler = async function (event) {
     };
 };
 
-netlify / functions / getProducts.js
+//netlify / functions / getProducts.js
 
 // const { faker } = require('@faker-js/faker');
 
