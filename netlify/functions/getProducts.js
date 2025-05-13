@@ -2,7 +2,7 @@
 
 const { faker } = require('@faker-js/faker');
 
-// 1️⃣ Generate once at startup and re-use across invocations
+// 1️⃣ generate once at startup
 const COLORS = ['red', 'blue', 'green', 'purple', 'orange'];
 // const COLOR_IMAGES = {
 //     red: 'https://picsum.photos/200/300?random=1',
@@ -12,15 +12,20 @@ const COLORS = ['red', 'blue', 'green', 'purple', 'orange'];
 //     orange: 'https://picsum.photos/200/300?random=5',
 // };
 
-const COLOR_IMAGES = () => `https://picsum.photos/400/300?random=${Math.floor(Math.random() * 1000)}`;
+function randomImageUrl() {
+    return `https://picsum.photos/400/300?random=${Math.floor(Math.random() * 1000)}`;
+}
 
 function generateProducts(count) {
     return Array.from({ length: count }).map(() => {
-        // pick 3–5 random colors
-        const shuffled = COLORS.sort(() => 0.5 - Math.random());
-        const chosen = shuffled.slice(0, Math.floor(3 + Math.random() * 3));
-        const colors = chosen.reduce((acc, c) => {
-            acc[c] = COLOR_IMAGES[c];
+        // shuffle a copy of COLORS so our module-level array isn’t mutated
+        const shuffled = [...COLORS].sort(() => 0.5 - Math.random());
+        const pickCount = Math.floor(3 + Math.random() * 3); // 3–5 colors
+        const chosen = shuffled.slice(0, pickCount);
+
+        // build a { colorName: imageUrl, … } map
+        const colors = chosen.reduce((acc, color) => {
+            acc[color] = randomImageUrl();
             return acc;
         }, {});
 
@@ -28,7 +33,7 @@ function generateProducts(count) {
             id: faker.string.uuid(),
             name: `${faker.commerce.productAdjective()} ${faker.commerce.product()}`,
             price: parseFloat(faker.commerce.price({ min: 10, max: 100, dec: 2 })),
-            colors,                   // { red: '…', blue: '…', … }
+            colors,                // now a proper object of urls
             sizes: ['S', 'M', 'L'],
         };
     });
@@ -38,11 +43,9 @@ function generateProducts(count) {
 const PRODUCTS = generateProducts(100);
 
 exports.handler = async function (event) {
-    const params = event.queryStringParameters || {};
-    const { id } = params;
+    const { id } = event.queryStringParameters || {};
 
     if (id) {
-        // 2️⃣ if an `id` was provided, return just that product
         const product = PRODUCTS.find((p) => p.id === id);
         if (!product) {
             return {
@@ -56,7 +59,7 @@ exports.handler = async function (event) {
         };
     }
 
-    // 3️⃣ no `id` => return the full array
+    // no id → return the full list
     return {
         statusCode: 200,
         body: JSON.stringify(PRODUCTS),
