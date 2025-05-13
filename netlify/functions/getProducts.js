@@ -40,7 +40,7 @@ function generateProducts(count) {
 }
 
 // keep the same 100 products in memory until the Lambda container recycles
-const PRODUCTS = generateProducts(100);
+const PRODUCTS = generateProducts(20000);
 
 exports.handler = async function (event) {
     const { id } = event.queryStringParameters || {};
